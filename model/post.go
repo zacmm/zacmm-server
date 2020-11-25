@@ -14,7 +14,7 @@ import (
 	"sync"
 	"unicode/utf8"
 
-	"github.com/mattermost/mattermost-server/v5/utils/markdown"
+	"github.com/zacmm/zacmm-server/utils/markdown"
 )
 
 const (

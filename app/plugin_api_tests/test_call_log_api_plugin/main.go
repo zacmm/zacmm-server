@@ -4,8 +4,8 @@
 package main
 
 import (
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/plugin"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/plugin"
 	"github.com/pkg/errors"
 )
 

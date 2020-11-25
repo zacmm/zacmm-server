@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mattermost/mattermost-server/v5/einterfaces"
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/einterfaces"
+	"github.com/zacmm/zacmm-server/model"
 	"github.com/stretchr/testify/require"
 )
 

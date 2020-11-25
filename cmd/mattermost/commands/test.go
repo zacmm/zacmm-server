@@ -12,10 +12,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/mattermost/mattermost-server/v5/api4"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/utils"
-	"github.com/mattermost/mattermost-server/v5/wsapi"
+	"github.com/zacmm/zacmm-server/api4"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/utils"
+	"github.com/zacmm/zacmm-server/wsapi"
 	"github.com/spf13/cobra"
 )
 

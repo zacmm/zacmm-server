@@ -36,14 +36,14 @@ echo "Checking prerequisites"
 REQUIREDNODEVERSION=8.9.0
 REQUIREDNPMVERSION=5.6.0
 REQUIREDGOVERSION=1.14.0
-REQUIREDDOCKERVERSION=17.0
+#REQUIREDDOCKERVERSION=17.0
 
 NODEVERSION=$(sed 's/v//' <<< $(node -v))
 NPMVERSION=$(npm -v)
 GOVERSION=$(sed -ne 's/[^0-9]*\(\([0-9]\.\)\{0,4\}[0-9][^.]\).*/\1/p' <<< $(go version))
-DOCKERVERSION=$(docker version --format '{{.Server.Version}}' | sed 's/[a-z-]//g')
+#DOCKERVERSION=$(docker version --format '{{.Server.Version}}' | sed 's/[a-z-]//g')
 
 check_prereq 'node' $REQUIREDNODEVERSION $NODEVERSION
 check_prereq 'npm' $REQUIREDNPMVERSION $NPMVERSION
 check_prereq 'go' $REQUIREDGOVERSION $GOVERSION
-check_prereq 'docker' $REQUIREDDOCKERVERSION $DOCKERVERSION
+#check_prereq 'docker' $REQUIREDDOCKERVERSION $DOCKERVERSION

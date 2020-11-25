@@ -9,9 +9,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/model"
 
-	"github.com/mattermost/mattermost-server/v5/config/config_generator/generator"
+	"github.com/zacmm/zacmm-server/config/config_generator/generator"
 	"github.com/stretchr/testify/require"
 )
 

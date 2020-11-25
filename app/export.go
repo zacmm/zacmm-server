@@ -11,10 +11,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/mattermost/mattermost-server/v5/store"
+	"github.com/zacmm/zacmm-server/store"
 
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/mlog"
+	"github.com/zacmm/zacmm-server/model"
 	"github.com/pkg/errors"
 )
 

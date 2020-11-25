@@ -6,8 +6,8 @@ package active_users
 import (
 	"time"
 
-	"github.com/mattermost/mattermost-server/v5/app"
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/app"
+	"github.com/zacmm/zacmm-server/model"
 )
 
 const (

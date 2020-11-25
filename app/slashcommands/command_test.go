@@ -16,8 +16,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/httpservice"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/services/httpservice"
 )
 
 type InfiniteReader struct {

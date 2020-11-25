@@ -6,7 +6,7 @@ package api4
 import (
 	"net/http"
 
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/model"
 )
 
 func (api *API) InitStatus() {

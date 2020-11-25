@@ -21,20 +21,20 @@ jobs:
       - checkout
       - run: |
           cd ../
-          git clone --depth=1 --no-single-branch https://github.com/mattermost/mattermost-webapp.git
-          cd mattermost-webapp
+          git clone --depth=1 --no-single-branch https://github.com/mattermost/zacmm-webapp.git
+          cd zacmm-webapp
           git checkout $CIRCLE_BRANCH || git checkout master
           export WEBAPP_GIT_COMMIT=$(git rev-parse HEAD)
           echo "$WEBAPP_GIT_COMMIT"
 
           trap 'npm ci && cd node_modules/mattermost-redux && npm i && npm run build && cd - && make build' ERR
-          curl -f -o ./dist.tar.gz https://pr-builds.mattermost.com/mattermost-webapp/commit/${WEBAPP_GIT_COMMIT}/mattermost-webapp.tar.gz
+          curl -f -o ./dist.tar.gz https://pr-builds.mattermost.com/zacmm-webapp/commit/${WEBAPP_GIT_COMMIT}/zacmm-webapp.tar.gz
           mkdir ./dist && tar -xvf ./dist.tar.gz -C ./dist --strip-components=1
           trap - ERR
       - persist_to_workspace:
           root: ~/mattermost
           paths:
-            - mattermost-webapp
+            - zacmm-webapp
             - mattermost-server
 
   check-deps:
@@ -184,7 +184,7 @@ jobs:
           root: ~/mattermost
           paths:
             - mattermost-server
-            - mattermost-webapp
+            - zacmm-webapp
 
   test:
     executor:

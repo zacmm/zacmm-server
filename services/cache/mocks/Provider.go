@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	cache "github.com/mattermost/mattermost-server/v5/services/cache"
+	cache "github.com/zacmm/zacmm-server/services/cache"
 	mock "github.com/stretchr/testify/mock"
 )
 

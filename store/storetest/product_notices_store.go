@@ -4,10 +4,10 @@
 package storetest
 
 import (
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/model"
 	"testing"
 
-	"github.com/mattermost/mattermost-server/v5/store"
+	"github.com/zacmm/zacmm-server/store"
 	"github.com/stretchr/testify/require"
 )
 

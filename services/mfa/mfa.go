@@ -10,9 +10,9 @@ import (
 	"strings"
 
 	"github.com/dgryski/dgoogauth"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/configservice"
-	"github.com/mattermost/mattermost-server/v5/store"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/services/configservice"
+	"github.com/zacmm/zacmm-server/store"
 	"github.com/mattermost/rsc/qr"
 )
 

@@ -9,10 +9,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/mattermost/mattermost-server/v5/app"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/utils"
-	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
+	"github.com/zacmm/zacmm-server/app"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/utils"
+	"github.com/zacmm/zacmm-server/utils/fileutils"
 )
 
 type AutoPostCreator struct {

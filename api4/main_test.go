@@ -6,8 +6,8 @@ package api4
 import (
 	"testing"
 
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/testlib"
+	"github.com/zacmm/zacmm-server/mlog"
+	"github.com/zacmm/zacmm-server/testlib"
 )
 
 func TestMain(m *testing.M) {

@@ -18,10 +18,10 @@ import (
 	"net/mail"
 	"net/smtp"
 
-	"github.com/mattermost/mattermost-server/v5/config"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/filesstore"
-	"github.com/mattermost/mattermost-server/v5/utils"
+	"github.com/zacmm/zacmm-server/config"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/services/filesstore"
+	"github.com/zacmm/zacmm-server/utils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

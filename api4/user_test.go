@@ -12,10 +12,10 @@ import (
 	"time"
 
 	"github.com/dgryski/dgoogauth"
-	"github.com/mattermost/mattermost-server/v5/app"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/mailservice"
-	"github.com/mattermost/mattermost-server/v5/utils/testutils"
+	"github.com/zacmm/zacmm-server/app"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/services/mailservice"
+	"github.com/zacmm/zacmm-server/utils/testutils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

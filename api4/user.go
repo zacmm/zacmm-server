@@ -9,16 +9,17 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/mattermost/mattermost-server/v5/app"
-	"github.com/mattermost/mattermost-server/v5/audit"
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store"
-	"github.com/mattermost/mattermost-server/v5/utils"
+	"github.com/zacmm/zacmm-server/app"
+	"github.com/zacmm/zacmm-server/audit"
+	"github.com/zacmm/zacmm-server/mlog"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/store"
+	"github.com/zacmm/zacmm-server/utils"
 )
 
 func (api *API) InitUser() {
@@ -32,6 +33,8 @@ func (api *API) InitUser() {
 	api.BaseRoutes.Users.Handle("/stats", api.ApiSessionRequired(getTotalUsersStats)).Methods("GET")
 	api.BaseRoutes.Users.Handle("/stats/filtered", api.ApiSessionRequired(getFilteredUsersStats)).Methods("GET")
 	api.BaseRoutes.Users.Handle("/group_channels", api.ApiSessionRequired(getUsersByGroupChannelIds)).Methods("POST")
+	api.BaseRoutes.Users.Handle("/add_to_whitelist", api.ApiSessionRequired(addToWhitelist)).Methods("POST")
+	api.BaseRoutes.Users.Handle("/delete_from_whitelist", api.ApiSessionRequired(deleteFromWhitelist)).Methods("DELETE")
 
 	api.BaseRoutes.User.Handle("", api.ApiSessionRequired(getUser)).Methods("GET")
 	api.BaseRoutes.User.Handle("/image/default", api.ApiSessionRequiredTrustRequester(getDefaultProfileImage)).Methods("GET")
@@ -54,6 +57,7 @@ func (api *API) InitUser() {
 	api.BaseRoutes.User.Handle("/email/verify/member", api.ApiSessionRequired(verifyUserEmailWithoutToken)).Methods("POST")
 	api.BaseRoutes.User.Handle("/terms_of_service", api.ApiSessionRequired(saveUserTermsOfService)).Methods("POST")
 	api.BaseRoutes.User.Handle("/terms_of_service", api.ApiSessionRequired(getUserTermsOfService)).Methods("GET")
+	api.BaseRoutes.User.Handle("/get_whitelist", api.ApiSessionRequired(getWhitelist)).Methods("GET")
 
 	api.BaseRoutes.User.Handle("/auth", api.ApiSessionRequiredTrustRequester(updateUserAuth)).Methods("PUT")
 
@@ -99,6 +103,70 @@ func (api *API) InitUser() {
 	api.BaseRoutes.UserThread.Handle("/following", api.ApiSessionRequired(unfollowThreadByUser)).Methods("DELETE")
 	api.BaseRoutes.UserThread.Handle("/read/{timestamp:[0-9]+}", api.ApiSessionRequired(updateReadStateThreadByUser)).Methods("PUT")
 }
+
+var ipRe = regexp.MustCompile(`^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$`)
+
+func addToWhitelist(c *Context, w http.ResponseWriter, r *http.Request) {
+	if !c.IsSystemAdmin() {
+		c.SetPermissionError(model.PERMISSION_EDIT_OTHER_USERS)
+		return
+	}
+	item := model.WhitelistItemFromJson(r.Body)
+
+	if !ipRe.MatchString(item.IP) {
+		w.Write([]byte(model.StringToJson("Invalid IP address")))
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	err := c.App.AddToWhitelist(item)
+	if err != nil {
+		if err.DetailedError == "IP is already added" {
+			w.Write([]byte(model.StringToJson("IP is already added")))
+			w.WriteHeader(http.StatusOK)
+		} else {
+			c.Err = err
+		}
+		return
+	}
+
+	ReturnStatusOK(w)
+}
+
+func deleteFromWhitelist(c *Context, w http.ResponseWriter, r *http.Request) {
+	if !c.IsSystemAdmin() {
+		c.SetPermissionError(model.PERMISSION_EDIT_OTHER_USERS)
+		return
+	}
+	item := model.WhitelistItemFromJson(r.Body)
+
+	err := c.App.DeleteFromWhitelist(item)
+	if err != nil {
+		c.Err = err
+		return
+	}
+
+	ReturnStatusOK(w)
+}
+
+func getWhitelist(c *Context, w http.ResponseWriter, r *http.Request) {
+	c.RequireUserId()
+	if c.Err != nil {
+		return
+	}
+	if !c.IsSystemAdmin() {
+		c.SetPermissionError(model.PERMISSION_EDIT_OTHER_USERS)
+		return
+	}
+	ips, err := c.App.GetWhitelist(c.Params.UserId)
+	if err != nil {
+		c.Err = err
+		return
+	}
+
+	w.Write([]byte(model.ArrayToJson(ips)))
+}
+
 
 func createUser(c *Context, w http.ResponseWriter, r *http.Request) {
 	user := model.UserFromJson(r.Body)
@@ -1653,6 +1721,24 @@ func sendPasswordReset(c *Context, w http.ResponseWriter, r *http.Request) {
 		c.LogAudit("sent=" + email)
 	}
 	ReturnStatusOK(w)
+}
+
+func checkWhitelisted(c *Context, r *http.Request) (bool, *model.AppError) {
+	if c.IsSystemAdmin() {
+		return true, nil
+	}
+	userId := c.App.Session().UserId
+	ips := append(r.Header["X-Forwarded-For"], r.Header["X-Real-IP"]...)
+	for _, ip := range ips {
+		whitelisted, err := c.App.CheckWhitelisted(userId, ip)
+		if err != nil {
+			return false, err
+		}
+		if whitelisted {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 func login(c *Context, w http.ResponseWriter, r *http.Request) {

@@ -11,8 +11,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/utils/fileutils"
 	"github.com/stretchr/testify/assert"
 )
 

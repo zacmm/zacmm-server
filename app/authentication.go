@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/mfa"
-	"github.com/mattermost/mattermost-server/v5/utils"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/services/mfa"
+	"github.com/zacmm/zacmm-server/utils"
 )
 
 type TokenLocation int

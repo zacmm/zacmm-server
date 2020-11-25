@@ -4,7 +4,7 @@
 package app
 
 import (
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/model"
 )
 
 func (a *App) CheckAndSendUserLimitWarningEmails() *model.AppError {

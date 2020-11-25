@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store"
-	"github.com/mattermost/mattermost-server/v5/store/retrylayer"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/store"
+	"github.com/zacmm/zacmm-server/store/retrylayer"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

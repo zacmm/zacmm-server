@@ -8,7 +8,7 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
+	"github.com/zacmm/zacmm-server/utils/fileutils"
 )
 
 func main() {

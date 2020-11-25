@@ -4,12 +4,12 @@
 package app
 
 import (
-	"github.com/mattermost/mattermost-server/v5/einterfaces"
-	ejobs "github.com/mattermost/mattermost-server/v5/einterfaces/jobs"
-	tjobs "github.com/mattermost/mattermost-server/v5/jobs/interfaces"
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/searchengine"
+	"github.com/zacmm/zacmm-server/einterfaces"
+	ejobs "github.com/zacmm/zacmm-server/einterfaces/jobs"
+	tjobs "github.com/zacmm/zacmm-server/jobs/interfaces"
+	"github.com/zacmm/zacmm-server/mlog"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/services/searchengine"
 )
 
 var accountMigrationInterface func(*App) einterfaces.AccountMigrationInterface

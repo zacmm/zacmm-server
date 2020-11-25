@@ -14,7 +14,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
+	"github.com/zacmm/zacmm-server/utils/fileutils"
 )
 
 func ReadTestFile(name string) ([]byte, error) {

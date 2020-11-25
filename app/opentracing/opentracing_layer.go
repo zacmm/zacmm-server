@@ -20,19 +20,19 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/mattermost/go-i18n/i18n"
 	goi18n "github.com/mattermost/go-i18n/i18n"
-	"github.com/mattermost/mattermost-server/v5/app"
-	"github.com/mattermost/mattermost-server/v5/audit"
-	"github.com/mattermost/mattermost-server/v5/einterfaces"
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/plugin"
-	"github.com/mattermost/mattermost-server/v5/services/filesstore"
-	"github.com/mattermost/mattermost-server/v5/services/httpservice"
-	"github.com/mattermost/mattermost-server/v5/services/imageproxy"
-	"github.com/mattermost/mattermost-server/v5/services/searchengine"
-	"github.com/mattermost/mattermost-server/v5/services/timezones"
-	"github.com/mattermost/mattermost-server/v5/services/tracing"
-	"github.com/mattermost/mattermost-server/v5/store"
+	"github.com/zacmm/zacmm-server/app"
+	"github.com/zacmm/zacmm-server/audit"
+	"github.com/zacmm/zacmm-server/einterfaces"
+	"github.com/zacmm/zacmm-server/mlog"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/plugin"
+	"github.com/zacmm/zacmm-server/services/filesstore"
+	"github.com/zacmm/zacmm-server/services/httpservice"
+	"github.com/zacmm/zacmm-server/services/imageproxy"
+	"github.com/zacmm/zacmm-server/services/searchengine"
+	"github.com/zacmm/zacmm-server/services/timezones"
+	"github.com/zacmm/zacmm-server/services/tracing"
+	"github.com/zacmm/zacmm-server/store"
 	"github.com/opentracing/opentracing-go/ext"
 	spanlog "github.com/opentracing/opentracing-go/log"
 )
@@ -70,6 +70,22 @@ type OpenTracingAppLayer struct {
 
 	context context.Context
 	ctx     context.Context
+}
+
+func (a *OpenTracingAppLayer) AddToWhitelist(item *model.WhitelistItem) *model.AppError {
+	return a.app.AddToWhitelist(item)
+}
+
+func (a *OpenTracingAppLayer) DeleteFromWhitelist(item *model.WhitelistItem) *model.AppError {
+	return a.app.DeleteFromWhitelist(item)
+}
+
+func (a *OpenTracingAppLayer) GetWhitelist(userId string) ([]string, *model.AppError) {
+	return a.app.GetWhitelist(userId)
+}
+
+func (a *OpenTracingAppLayer) CheckWhitelisted(userId, ip string) (bool, *model.AppError) {
+	return a.app.CheckWhitelisted(userId, ip)
 }
 
 func (a *OpenTracingAppLayer) ActivateMfa(userId string, token string) *model.AppError {

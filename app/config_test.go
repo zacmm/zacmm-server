@@ -11,9 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store/storetest/mocks"
-	"github.com/mattermost/mattermost-server/v5/utils"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/store/storetest/mocks"
+	"github.com/zacmm/zacmm-server/utils"
 )
 
 func TestConfigListener(t *testing.T) {

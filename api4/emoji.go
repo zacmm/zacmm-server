@@ -9,10 +9,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/mattermost/mattermost-server/v5/app"
-	"github.com/mattermost/mattermost-server/v5/audit"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/web"
+	"github.com/zacmm/zacmm-server/app"
+	"github.com/zacmm/zacmm-server/audit"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/web"
 )
 
 const (

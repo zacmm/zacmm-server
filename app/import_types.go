@@ -3,7 +3,7 @@
 
 package app
 
-import "github.com/mattermost/mattermost-server/v5/model"
+import "github.com/zacmm/zacmm-server/model"
 
 // Import Data Models
 

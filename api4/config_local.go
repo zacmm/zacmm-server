@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/mattermost/mattermost-server/v5/audit"
-	"github.com/mattermost/mattermost-server/v5/config"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/utils"
+	"github.com/zacmm/zacmm-server/audit"
+	"github.com/zacmm/zacmm-server/config"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/utils"
 )
 
 func (api *API) InitConfigLocal() {

@@ -17,9 +17,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store/sqlstore"
-	"github.com/mattermost/mattermost-server/v5/store/storetest"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/store/sqlstore"
+	"github.com/zacmm/zacmm-server/store/storetest"
 )
 
 // This test was used to consistently reproduce the race

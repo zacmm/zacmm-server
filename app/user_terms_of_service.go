@@ -7,8 +7,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/store"
 )
 
 func (a *App) GetUserTermsOfService(userId string) (*model.UserTermsOfService, *model.AppError) {

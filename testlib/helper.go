@@ -11,14 +11,14 @@ import (
 	"os"
 	"testing"
 
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/services/searchengine"
-	"github.com/mattermost/mattermost-server/v5/store"
-	"github.com/mattermost/mattermost-server/v5/store/searchlayer"
-	"github.com/mattermost/mattermost-server/v5/store/sqlstore"
-	"github.com/mattermost/mattermost-server/v5/store/storetest"
-	"github.com/mattermost/mattermost-server/v5/utils"
+	"github.com/zacmm/zacmm-server/mlog"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/services/searchengine"
+	"github.com/zacmm/zacmm-server/store"
+	//"github.com/zacmm/zacmm-server/store/searchlayer"
+	"github.com/zacmm/zacmm-server/store/sqlstore"
+	"github.com/zacmm/zacmm-server/store/storetest"
+	"github.com/zacmm/zacmm-server/utils"
 )
 
 type MainHelper struct {
@@ -97,7 +97,7 @@ func (h *MainHelper) Main(m *testing.M) {
 }
 
 func (h *MainHelper) setupStore() {
-	driverName := os.Getenv("MM_SQLSETTINGS_DRIVERNAME")
+	/*driverName := os.Getenv("MM_SQLSETTINGS_DRIVERNAME")
 	if driverName == "" {
 		driverName = model.DATABASE_DRIVER_POSTGRES
 	}
@@ -112,7 +112,7 @@ func (h *MainHelper) setupStore() {
 	h.SQLSupplier = sqlstore.NewSqlSupplier(*h.Settings, nil)
 	h.Store = searchlayer.NewSearchLayer(&TestStore{
 		h.SQLSupplier,
-	}, h.SearchEngine, config)
+	}, h.SearchEngine, config)*/
 }
 
 func (h *MainHelper) setupResources() {

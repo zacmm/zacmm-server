@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/model"
 
 	"github.com/stretchr/testify/require"
 )

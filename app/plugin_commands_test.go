@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/utils"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/utils"
 	"github.com/stretchr/testify/require"
 )
 
@@ -38,8 +38,8 @@ func TestPluginCommand(t *testing.T) {
 			package main
 
 			import (
-				"github.com/mattermost/mattermost-server/v5/plugin"
-				"github.com/mattermost/mattermost-server/v5/model"
+				"github.com/zacmm/zacmm-server/plugin"
+				"github.com/zacmm/zacmm-server/model"
 			)
 
 			type configuration struct {
@@ -119,8 +119,8 @@ func TestPluginCommand(t *testing.T) {
 			package main
 
 			import (
-				"github.com/mattermost/mattermost-server/v5/plugin"
-				"github.com/mattermost/mattermost-server/v5/model"
+				"github.com/zacmm/zacmm-server/plugin"
+				"github.com/zacmm/zacmm-server/model"
 			)
 
 			type configuration struct {
@@ -226,8 +226,8 @@ func TestPluginCommand(t *testing.T) {
 			package main
 
 			import (
-				"github.com/mattermost/mattermost-server/v5/plugin"
-				"github.com/mattermost/mattermost-server/v5/model"
+				"github.com/zacmm/zacmm-server/plugin"
+				"github.com/zacmm/zacmm-server/model"
 			)
 
 			type configuration struct {
@@ -291,8 +291,8 @@ func TestPluginCommand(t *testing.T) {
 			package main
 
 			import (
-				"github.com/mattermost/mattermost-server/v5/plugin"
-				"github.com/mattermost/mattermost-server/v5/model"
+				"github.com/zacmm/zacmm-server/plugin"
+				"github.com/zacmm/zacmm-server/model"
 			)
 
 			type MyPlugin struct {
@@ -336,8 +336,8 @@ func TestPluginCommand(t *testing.T) {
 			package main
 
 			import (
-				"github.com/mattermost/mattermost-server/v5/plugin"
-				"github.com/mattermost/mattermost-server/v5/model"
+				"github.com/zacmm/zacmm-server/plugin"
+				"github.com/zacmm/zacmm-server/model"
 			)
 
 			type MyPlugin struct {

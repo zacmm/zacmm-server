@@ -3,7 +3,7 @@
 
 package jobs
 
-import "github.com/mattermost/mattermost-server/v5/model"
+import "github.com/zacmm/zacmm-server/model"
 
 type CloudJobInterface interface {
 	MakeWorker() model.Worker

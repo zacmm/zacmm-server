@@ -10,10 +10,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store"
-	"github.com/mattermost/mattermost-server/v5/store/searchtest"
-	"github.com/mattermost/mattermost-server/v5/store/storetest"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/store"
+	"github.com/zacmm/zacmm-server/store/searchtest"
+	"github.com/zacmm/zacmm-server/store/storetest"
 )
 
 func TestChannelStore(t *testing.T) {

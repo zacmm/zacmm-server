@@ -4,8 +4,8 @@
 package commands
 
 import (
-	"github.com/mattermost/mattermost-server/v5/audit"
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/audit"
+	"github.com/zacmm/zacmm-server/model"
 	"github.com/spf13/cobra"
 )
 

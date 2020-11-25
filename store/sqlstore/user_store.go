@@ -11,9 +11,9 @@ import (
 	"strings"
 
 	"github.com/mattermost/gorp"
-	"github.com/mattermost/mattermost-server/v5/einterfaces"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store"
+	"github.com/zacmm/zacmm-server/einterfaces"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/store"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/pkg/errors"

@@ -9,7 +9,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/model"
 )
 
 type StoreResult struct {
@@ -52,6 +52,7 @@ type Store interface {
 	TermsOfService() TermsOfServiceStore
 	ProductNotices() ProductNoticesStore
 	Group() GroupStore
+	Whitelist() WhitelistStore
 	UserTermsOfService() UserTermsOfServiceStore
 	LinkMetadata() LinkMetadataStore
 	MarkSystemRanUnitTests()
@@ -684,6 +685,12 @@ type UserTermsOfServiceStore interface {
 	GetByUser(userId string) (*model.UserTermsOfService, error)
 	Save(userTermsOfService *model.UserTermsOfService) (*model.UserTermsOfService, error)
 	Delete(userId, termsOfServiceId string) error
+}
+
+type WhitelistStore interface {
+	Add(whitelistItem *model.WhitelistItem) error
+	Delete(whitelistItem *model.WhitelistItem) error
+	GetByUserId(userId string) ([]string, error)
 }
 
 type GroupStore interface {

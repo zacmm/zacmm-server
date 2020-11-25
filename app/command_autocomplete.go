@@ -10,8 +10,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/mlog"
+	"github.com/zacmm/zacmm-server/model"
 )
 
 // AutocompleteDynamicArgProvider dynamically provides auto-completion args for built-in commands.

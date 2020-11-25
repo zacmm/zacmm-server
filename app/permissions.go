@@ -10,7 +10,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/model"
 	"github.com/pkg/errors"
 )
 

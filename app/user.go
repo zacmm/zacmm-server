@@ -27,14 +27,14 @@ import (
 	"github.com/disintegration/imaging"
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
-	"github.com/mattermost/mattermost-server/v5/einterfaces"
-	"github.com/mattermost/mattermost-server/v5/mlog"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/plugin"
-	"github.com/mattermost/mattermost-server/v5/services/mfa"
-	"github.com/mattermost/mattermost-server/v5/store"
-	"github.com/mattermost/mattermost-server/v5/utils"
-	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
+	"github.com/zacmm/zacmm-server/einterfaces"
+	"github.com/zacmm/zacmm-server/mlog"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/plugin"
+	"github.com/zacmm/zacmm-server/services/mfa"
+	"github.com/zacmm/zacmm-server/store"
+	"github.com/zacmm/zacmm-server/utils"
+	"github.com/zacmm/zacmm-server/utils/fileutils"
 )
 
 const (
@@ -47,6 +47,59 @@ const (
 	INVITATION_EXPIRY_TIME        = 1000 * 60 * 60 * 48 // 48 hours
 	IMAGE_PROFILE_PIXEL_DIMENSION = 128
 )
+
+func (a *App) AddToWhitelist(item *model.WhitelistItem) *model.AppError {
+	userId, ip := item.UserId, item.IP
+
+	existingIPs, err := a.Srv().Store.Whitelist().GetByUserId(userId)
+	if err != nil {
+		return model.NewAppError("AddToWhitelist", "app.users.add_to_whitelist", nil, err.Error(), http.StatusNotFound)
+	}
+
+	for _, existingIP := range existingIPs {
+		if existingIP == ip {
+			return model.NewAppError("AddToWhitelist", "app.users.add_to_whitelist", nil, "IP is already added", http.StatusBadRequest)
+		}
+	}
+
+	err = a.Srv().Store.Whitelist().Add(item)
+	if err != nil {
+		return model.NewAppError("AddToWhitelist", "app.users.add_to_whitelist", nil, err.Error(), http.StatusInternalServerError)
+	}
+
+	return nil
+}
+
+func (a *App) DeleteFromWhitelist(item *model.WhitelistItem) *model.AppError {
+	err := a.Srv().Store.Whitelist().Delete(item)
+	if err != nil {
+		return model.NewAppError("DeleteFromWhitelist", "app.users.delete_from_whitelist", nil, err.Error(), http.StatusInternalServerError)
+	}
+
+	return nil
+}
+
+func (a *App) GetWhitelist(userId string) ([]string, *model.AppError) {
+	ips, err := a.Srv().Store.Whitelist().GetByUserId(userId)
+	if err != nil {
+		return []string{}, model.NewAppError("GetWhitelist", "app.users.get_whitelist", nil, err.Error(), http.StatusInternalServerError)
+	}
+
+	return ips, nil
+}
+
+func (a *App) CheckWhitelisted(userId, ipToCheck string) (bool, *model.AppError) {
+	ips, err := a.Srv().Store.Whitelist().GetByUserId(userId)
+	if err != nil {
+		return false, model.NewAppError("GetWhitelist", "app.users.get_whitelist", nil, err.Error(), http.StatusInternalServerError)
+	}
+	for _, ip := range ips {
+		if ip == ipToCheck {
+			return true, nil
+		}
+	}
+	return false, nil
+}
 
 func (a *App) CreateUserWithToken(user *model.User, token *model.Token) (*model.User, *model.AppError) {
 	if err := a.IsUserSignUpAllowed(); err != nil {

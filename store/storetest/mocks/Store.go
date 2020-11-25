@@ -7,10 +7,10 @@ package mocks
 import (
 	context "context"
 
-	model "github.com/mattermost/mattermost-server/v5/model"
+	model "github.com/zacmm/zacmm-server/model"
 	mock "github.com/stretchr/testify/mock"
 
-	store "github.com/mattermost/mattermost-server/v5/store"
+	store "github.com/zacmm/zacmm-server/store"
 
 	time "time"
 )
@@ -705,5 +705,10 @@ func (_m *Store) Webhook() store.WebhookStore {
 		}
 	}
 
+	return r0
+}
+
+func (_m *Store) Whitelist() store.WhitelistStore {
+	var r0 store.WhitelistStore
 	return r0
 }

@@ -6,10 +6,10 @@ package app
 import (
 	"testing"
 
-	"github.com/mattermost/mattermost-server/v5/einterfaces"
-	"github.com/mattermost/mattermost-server/v5/einterfaces/mocks"
-	"github.com/mattermost/mattermost-server/v5/model"
-	storemocks "github.com/mattermost/mattermost-server/v5/store/storetest/mocks"
+	"github.com/zacmm/zacmm-server/einterfaces"
+	"github.com/zacmm/zacmm-server/einterfaces/mocks"
+	"github.com/zacmm/zacmm-server/model"
+	storemocks "github.com/zacmm/zacmm-server/store/storetest/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

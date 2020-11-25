@@ -11,8 +11,8 @@ import (
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/lib/pq"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/store"
 	"github.com/pkg/errors"
 )
 
@@ -54,6 +54,7 @@ type RetryLayer struct {
 	UserAccessTokenStore      store.UserAccessTokenStore
 	UserTermsOfServiceStore   store.UserTermsOfServiceStore
 	WebhookStore              store.WebhookStore
+	WhitelistStore            store.WhitelistStore
 }
 
 func (s *RetryLayer) Audit() store.AuditStore {
@@ -190,6 +191,10 @@ func (s *RetryLayer) UserTermsOfService() store.UserTermsOfServiceStore {
 
 func (s *RetryLayer) Webhook() store.WebhookStore {
 	return s.WebhookStore
+}
+
+func (s *RetryLayer) Whitelist() store.WhitelistStore {
+	return s.WhitelistStore
 }
 
 type RetryLayerAuditStore struct {
@@ -359,6 +364,11 @@ type RetryLayerUserTermsOfServiceStore struct {
 
 type RetryLayerWebhookStore struct {
 	store.WebhookStore
+	Root *RetryLayer
+}
+
+type RetryLayerWhitelistStore struct {
+	store.WhitelistStore
 	Root *RetryLayer
 }
 
@@ -10917,5 +10927,6 @@ func New(childStore store.Store) *RetryLayer {
 	newStore.UserAccessTokenStore = &RetryLayerUserAccessTokenStore{UserAccessTokenStore: childStore.UserAccessToken(), Root: &newStore}
 	newStore.UserTermsOfServiceStore = &RetryLayerUserTermsOfServiceStore{UserTermsOfServiceStore: childStore.UserTermsOfService(), Root: &newStore}
 	newStore.WebhookStore = &RetryLayerWebhookStore{WebhookStore: childStore.Webhook(), Root: &newStore}
+	newStore.WhitelistStore = &RetryLayerWhitelistStore{WhitelistStore: childStore.Whitelist(), Root: &newStore}
 	return &newStore
 }

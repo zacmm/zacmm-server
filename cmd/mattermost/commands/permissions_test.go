@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/mattermost/mattermost-server/v5/utils"
+	"github.com/zacmm/zacmm-server/utils"
 )
 
 func TestPermissionsExport_rejectsUnlicensed(t *testing.T) {

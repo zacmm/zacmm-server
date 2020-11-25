@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/zacmm/zacmm-server/mlog"
 )
 
 type LogSrcListener func(old, new mlog.LogTargetCfg)

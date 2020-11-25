@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store/storetest"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/store/storetest"
 )
 
 func TestTeamStore(t *testing.T) {

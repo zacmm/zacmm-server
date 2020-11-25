@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/mattermost/mattermost-server/v5/config"
-	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/zacmm/zacmm-server/config"
+	"github.com/zacmm/zacmm-server/model"
 )
 
 func TestGetClientConfig(t *testing.T) {

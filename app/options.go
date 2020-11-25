@@ -4,12 +4,12 @@
 package app
 
 import (
-	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/zacmm/zacmm-server/mlog"
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-server/v5/config"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/store"
+	"github.com/zacmm/zacmm-server/config"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/store"
 )
 
 type Option func(s *Server) error

@@ -6,7 +6,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/mattermost/mattermost-server/v5/mlog"
+	"github.com/zacmm/zacmm-server/mlog"
 )
 
 type splitLogger struct {

@@ -5,8 +5,8 @@
 package plugintest
 
 import (
-	model "github.com/mattermost/mattermost-server/v5/model"
-	plugin "github.com/mattermost/mattermost-server/v5/plugin"
+	model "github.com/zacmm/zacmm-server/model"
+	plugin "github.com/zacmm/zacmm-server/plugin"
 	mock "github.com/stretchr/testify/mock"
 )
 

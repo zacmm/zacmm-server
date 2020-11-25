@@ -18,11 +18,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/plugin"
-	"github.com/mattermost/mattermost-server/v5/testlib"
-	"github.com/mattermost/mattermost-server/v5/utils"
-	"github.com/mattermost/mattermost-server/v5/utils/fileutils"
+	"github.com/zacmm/zacmm-server/model"
+	"github.com/zacmm/zacmm-server/plugin"
+	"github.com/zacmm/zacmm-server/testlib"
+	"github.com/zacmm/zacmm-server/utils"
+	"github.com/zacmm/zacmm-server/utils/fileutils"
 
 	svg "github.com/h2non/go-is-svg"
 	"github.com/stretchr/testify/assert"
