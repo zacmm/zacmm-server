@@ -37,8 +37,8 @@ import (
 type AppIface interface {
 	AddToWhitelist(item *model.WhitelistItem) *model.AppError
 	DeleteFromWhitelist(item *model.WhitelistItem) *model.AppError
-	GetWhitelist(userId string) ([]string, *model.AppError)
-	CheckWhitelisted(userId, ip string) (bool, *model.AppError)
+	GetWhitelist() ([]string, *model.AppError)
+	CheckWhitelisted(ip string) (bool, *model.AppError)
 	// @openTracingParams args
 	ExecuteCommand(args *model.CommandArgs) (*model.CommandResponse, *model.AppError)
 	// @openTracingParams teamId

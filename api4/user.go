@@ -57,7 +57,7 @@ func (api *API) InitUser() {
 	api.BaseRoutes.User.Handle("/email/verify/member", api.ApiSessionRequired(verifyUserEmailWithoutToken)).Methods("POST")
 	api.BaseRoutes.User.Handle("/terms_of_service", api.ApiSessionRequired(saveUserTermsOfService)).Methods("POST")
 	api.BaseRoutes.User.Handle("/terms_of_service", api.ApiSessionRequired(getUserTermsOfService)).Methods("GET")
-	api.BaseRoutes.User.Handle("/get_whitelist", api.ApiSessionRequired(getWhitelist)).Methods("GET")
+	api.BaseRoutes.Users.Handle("/get_whitelist", api.ApiSessionRequired(getWhitelist)).Methods("GET")
 
 	api.BaseRoutes.User.Handle("/auth", api.ApiSessionRequiredTrustRequester(updateUserAuth)).Methods("PUT")
 
@@ -150,15 +150,11 @@ func deleteFromWhitelist(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getWhitelist(c *Context, w http.ResponseWriter, r *http.Request) {
-	c.RequireUserId()
-	if c.Err != nil {
-		return
-	}
 	if !c.IsSystemAdmin() {
 		c.SetPermissionError(model.PERMISSION_EDIT_OTHER_USERS)
 		return
 	}
-	ips, err := c.App.GetWhitelist(c.Params.UserId)
+	ips, err := c.App.GetWhitelist()
 	if err != nil {
 		c.Err = err
 		return
@@ -1727,10 +1723,9 @@ func checkWhitelisted(c *Context, r *http.Request) (bool, *model.AppError) {
 	if c.IsSystemAdmin() {
 		return true, nil
 	}
-	userId := c.App.Session().UserId
 	ips := append(r.Header["X-Forwarded-For"], r.Header["X-Real-IP"]...)
 	for _, ip := range ips {
-		whitelisted, err := c.App.CheckWhitelisted(userId, ip)
+		whitelisted, err := c.App.CheckWhitelisted(ip)
 		if err != nil {
 			return false, err
 		}
