@@ -20,6 +20,7 @@ import (
 	"github.com/zacmm/zacmm-server/model"
 	"github.com/zacmm/zacmm-server/store"
 	"github.com/zacmm/zacmm-server/utils"
+	"github.com/zacmm/zacmm-server/web"
 )
 
 func (api *API) InitUser() {
@@ -172,6 +173,21 @@ func createUser(c *Context, w http.ResponseWriter, r *http.Request) {
 	}
 
 	user.SanitizeInput(c.IsSystemAdmin())
+	users, gErr := c.App.GetUsers(&model.UserGetOptions{PerPage: 1})
+	if gErr != nil {
+		c.Err = gErr
+		return
+	}
+	if len(users) > 0 {
+		whitelisted, wlErr := web.CheckWhitelisted(c, r)
+		if wlErr != nil {
+			c.Err = wlErr
+			return
+		}
+		if !whitelisted {
+			return
+		}
+	}
 
 	tokenId := r.URL.Query().Get("t")
 	inviteId := r.URL.Query().Get("iid")
@@ -1719,23 +1735,6 @@ func sendPasswordReset(c *Context, w http.ResponseWriter, r *http.Request) {
 	ReturnStatusOK(w)
 }
 
-func checkWhitelisted(c *Context, r *http.Request) (bool, *model.AppError) {
-	if c.IsSystemAdmin() {
-		return true, nil
-	}
-	ips := append(r.Header["X-Forwarded-For"], r.Header["X-Real-IP"]...)
-	for _, ip := range ips {
-		whitelisted, err := c.App.CheckWhitelisted(ip)
-		if err != nil {
-			return false, err
-		}
-		if whitelisted {
-			return true, nil
-		}
-	}
-	return false, nil
-}
-
 func login(c *Context, w http.ResponseWriter, r *http.Request) {
 	// Mask all sensitive errors, with the exception of the following
 	defer func() {
@@ -1875,6 +1874,16 @@ func login(c *Context, w http.ResponseWriter, r *http.Request) {
 	user.Sanitize(map[string]bool{})
 
 	auditRec.Success()
+	whitelisted, wlErr := web.CheckWhitelisted(c, r)
+	if wlErr != nil {
+		c.Err = wlErr
+		Logout(c, w, r)
+		return
+	}
+	if !whitelisted {
+		Logout(c, w, r)
+		return
+	}
 	w.Write([]byte(user.ToJson()))
 }
 

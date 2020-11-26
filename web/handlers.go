@@ -81,6 +81,24 @@ type Handler struct {
 	cspShaDirective string
 }
 
+func CheckWhitelisted(c *Context, r *http.Request) (bool, *model.AppError) {
+	if c.IsSystemAdmin() {
+		return true, nil
+	}
+	ips := append(r.Header["X-Forwarded-For"], r.Header["X-Real-IP"]...)
+	for _, ip := range ips {
+		whitelisted, err := c.App.CheckWhitelisted(ip)
+		if err != nil {
+			return false, err
+		}
+		if whitelisted {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+
 func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w = newWrappedWriter(w)
 	now := time.Now()
@@ -239,6 +257,17 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			c.App.SetSession(&model.Session{Local: true})
 		} else if !isLocalOrigin {
 			c.Err = model.NewAppError("", "api.context.local_origin_required.app_error", nil, "LocalOriginRequired", http.StatusUnauthorized)
+		}
+	}
+
+	if h.RequireSession {
+		whitelisted, wlErr := CheckWhitelisted(c, r)
+		if wlErr != nil {
+			c.Err = wlErr
+			return
+		}
+		if !whitelisted {
+			return
 		}
 	}
 
