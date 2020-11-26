@@ -465,7 +465,7 @@ stop-client: ## Stops the webapp.
 
 	cd $(BUILD_WEBAPP_DIR) && $(MAKE) stop
 
-stop: stop-server stop-client stop-docker ## Stops server, client and the docker compose.
+stop: stop-server stop-client ## Stops server, client and the docker compose.
 
 restart: restart-server restart-client ## Restarts the server and webapp.
 
