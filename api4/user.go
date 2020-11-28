@@ -1750,6 +1750,7 @@ func login(c *Context, w http.ResponseWriter, r *http.Request) {
 			"api.user.login.client_side_cert.certificate.app_error",
 			"api.user.login.inactive.app_error",
 			"api.user.login.not_verified.app_error",
+			"api.user.login.outside.app_error",
 			"api.user.check_user_login_attempts.too_many.app_error",
 			"app.team.join_user_to_team.max_accounts.app_error",
 			"store.sql_user.save.max_accounts.app_error",
@@ -1875,13 +1876,11 @@ func login(c *Context, w http.ResponseWriter, r *http.Request) {
 
 	auditRec.Success()
 	whitelisted, wlErr := web.CheckWhitelisted(c, r)
-	if wlErr != nil {
-		c.Err = wlErr
-		Logout(c, w, r)
-		return
-	}
-	if !whitelisted {
-		Logout(c, w, r)
+	if wlErr != nil || !whitelisted {
+		c.RemoveSessionCookie(w, r)
+		if c.App.Session().Id != "" {
+			c.App.RevokeSessionById(c.App.Session().Id)
+		}
 		return
 	}
 	w.Write([]byte(user.ToJson()))
