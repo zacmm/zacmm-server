@@ -49,9 +49,9 @@ const (
 )
 
 func (a *App) AddToWhitelist(item *model.WhitelistItem) *model.AppError {
-	ip := item.IP
+	userId, ip := item.UserId, item.IP
 
-	existingIPs, err := a.Srv().Store.Whitelist().Get()
+	existingIPs, err := a.Srv().Store.Whitelist().GetByUserId(userId)
 	if err != nil {
 		return model.NewAppError("AddToWhitelist", "app.users.add_to_whitelist", nil, err.Error(), http.StatusNotFound)
 	}
@@ -79,26 +79,13 @@ func (a *App) DeleteFromWhitelist(item *model.WhitelistItem) *model.AppError {
 	return nil
 }
 
-func (a *App) GetWhitelist() ([]string, *model.AppError) {
-	ips, err := a.Srv().Store.Whitelist().Get()
+func (a *App) GetWhitelist(userId string) ([]string, *model.AppError) {
+	ips, err := a.Srv().Store.Whitelist().GetByUserId(userId)
 	if err != nil {
 		return []string{}, model.NewAppError("GetWhitelist", "app.users.get_whitelist", nil, err.Error(), http.StatusInternalServerError)
 	}
 
 	return ips, nil
-}
-
-func (a *App) CheckWhitelisted(ipToCheck string) (bool, *model.AppError) {
-	ips, err := a.Srv().Store.Whitelist().Get()
-	if err != nil {
-		return false, model.NewAppError("GetWhitelist", "app.users.get_whitelist", nil, err.Error(), http.StatusInternalServerError)
-	}
-	for _, ip := range ips {
-		if ip == ipToCheck {
-			return true, nil
-		}
-	}
-	return false, nil
 }
 
 func (a *App) CreateUserWithToken(user *model.User, token *model.Token) (*model.User, *model.AppError) {

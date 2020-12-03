@@ -58,7 +58,7 @@ func (api *API) InitUser() {
 	api.BaseRoutes.User.Handle("/email/verify/member", api.ApiSessionRequired(verifyUserEmailWithoutToken)).Methods("POST")
 	api.BaseRoutes.User.Handle("/terms_of_service", api.ApiSessionRequired(saveUserTermsOfService)).Methods("POST")
 	api.BaseRoutes.User.Handle("/terms_of_service", api.ApiSessionRequired(getUserTermsOfService)).Methods("GET")
-	api.BaseRoutes.Users.Handle("/get_whitelist", api.ApiSessionRequired(getWhitelist)).Methods("GET")
+	api.BaseRoutes.User.Handle("/get_whitelist", api.ApiSessionRequired(getWhitelist)).Methods("GET")
 
 	api.BaseRoutes.User.Handle("/auth", api.ApiSessionRequiredTrustRequester(updateUserAuth)).Methods("PUT")
 
@@ -151,11 +151,15 @@ func deleteFromWhitelist(c *Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getWhitelist(c *Context, w http.ResponseWriter, r *http.Request) {
+	c.RequireUserId()
+	if c.Err != nil {
+		return
+	}
 	if !c.IsSystemAdmin() {
 		c.SetPermissionError(model.PERMISSION_EDIT_OTHER_USERS)
 		return
 	}
-	ips, err := c.App.GetWhitelist()
+	ips, err := c.App.GetWhitelist(c.Params.UserId)
 	if err != nil {
 		c.Err = err
 		return
@@ -1750,7 +1754,6 @@ func login(c *Context, w http.ResponseWriter, r *http.Request) {
 			"api.user.login.client_side_cert.certificate.app_error",
 			"api.user.login.inactive.app_error",
 			"api.user.login.not_verified.app_error",
-			"api.user.login.outside.app_error",
 			"api.user.check_user_login_attempts.too_many.app_error",
 			"app.team.join_user_to_team.max_accounts.app_error",
 			"store.sql_user.save.max_accounts.app_error",

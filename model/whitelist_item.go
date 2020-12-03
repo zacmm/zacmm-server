@@ -10,6 +10,7 @@ import (
 
 // WebSocketRequest represents a request made to the server through a websocket.
 type WhitelistItem struct {
+	UserId string `json:"user_id"` // User Id
 	IP     string `json:"ip"`      // Ip from the whitelist
 }
 

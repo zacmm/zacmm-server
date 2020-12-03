@@ -690,7 +690,7 @@ type UserTermsOfServiceStore interface {
 type WhitelistStore interface {
 	Add(whitelistItem *model.WhitelistItem) error
 	Delete(whitelistItem *model.WhitelistItem) error
-	Get() ([]string, error)
+	GetByUserId(userId string) ([]string, error)
 }
 
 type GroupStore interface {

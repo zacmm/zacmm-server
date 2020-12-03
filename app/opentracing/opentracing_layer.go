@@ -80,12 +80,8 @@ func (a *OpenTracingAppLayer) DeleteFromWhitelist(item *model.WhitelistItem) *mo
 	return a.app.DeleteFromWhitelist(item)
 }
 
-func (a *OpenTracingAppLayer) GetWhitelist() ([]string, *model.AppError) {
-	return a.app.GetWhitelist()
-}
-
-func (a *OpenTracingAppLayer) CheckWhitelisted(ip string) (bool, *model.AppError) {
-	return a.app.CheckWhitelisted(ip)
+func (a *OpenTracingAppLayer) GetWhitelist(userId string) ([]string, *model.AppError) {
+	return a.app.GetWhitelist(userId)
 }
 
 func (a *OpenTracingAppLayer) ActivateMfa(userId string, token string) *model.AppError {

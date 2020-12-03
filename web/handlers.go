@@ -85,19 +85,20 @@ func CheckWhitelisted(c *Context, r *http.Request) (bool, *model.AppError) {
 	if c.IsSystemAdmin() {
 		return true, nil
 	}
-	ips := append(r.Header["X-Forwarded-For"], r.Header["X-Real-IP"]...)
-	for _, ip := range ips {
-		whitelisted, err := c.App.CheckWhitelisted(ip)
-		if err != nil {
-			return false, err
-		}
-		if whitelisted {
-			return true, nil
+	userIps := append(r.Header["X-Forwarded-For"], r.Header["X-Real-IP"]...)
+	wlIps, err := c.App.Srv().Store.Whitelist().GetByUserId(c.App.Session().UserId)
+	if err != nil {
+		return false, model.NewAppError("GetWhitelist", "app.users.get_whitelist", nil, err.Error(), http.StatusInternalServerError)
+	}
+	for _, userIp := range userIps {
+		for _, wlIp := range wlIps {
+			if userIp == wlIp {
+				return true, nil
+			}
 		}
 	}
 	return false, nil
 }
-
 
 func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w = newWrappedWriter(w)

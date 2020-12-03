@@ -13,8 +13,8 @@ type LocalCacheWhitelistStore struct {
 	rootStore *LocalCacheStore
 }
 
-func (s LocalCacheWhitelistStore) Get() ([]string, error) {
-	return s.WhitelistStore.Get()
+func (s LocalCacheWhitelistStore) GetByUserId(userId string) ([]string, error) {
+	return s.WhitelistStore.GetByUserId(userId)
 }
 
 func (s LocalCacheWhitelistStore) Add(item *model.WhitelistItem) error {
