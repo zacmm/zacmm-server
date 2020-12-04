@@ -718,6 +718,22 @@ func (a *App) GetPosts(channelId string, offset int, limit int) (*model.PostList
 	return postList, nil
 }
 
+func (a *App) GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, *model.AppError) {
+	options.PerPage = 20
+	postList, totalPosts, err := a.Srv().Store.Post().GetAllPosts(options)
+	if err != nil {
+		var invErr *store.ErrInvalidInput
+		switch {
+		case errors.As(err, &invErr):
+			return nil, 0, model.NewAppError("GetAllPosts", "app.post.get_posts.app_error", nil, invErr.Error(), http.StatusBadRequest)
+		default:
+			return nil, 0, model.NewAppError("GetAllPosts", "app.post.get_root_posts.app_error", nil, err.Error(), http.StatusInternalServerError)
+		}
+	}
+
+	return postList, totalPosts, nil
+}
+
 func (a *App) GetPostsEtag(channelId string) string {
 	return a.Srv().Store.Post().GetEtag(channelId, true)
 }

@@ -7002,6 +7002,10 @@ func (a *OpenTracingAppLayer) GetPostThread(postId string, skipFetchThreads bool
 	return resultVar0, resultVar1
 }
 
+func (a *OpenTracingAppLayer) GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, *model.AppError) {
+	return a.app.GetAllPosts(options)
+}
+
 func (a *OpenTracingAppLayer) GetPosts(channelId string, offset int, limit int) (*model.PostList, *model.AppError) {
 	origCtx := a.ctx
 	span, newCtx := tracing.StartSpanWithParentByContext(a.ctx, "app.GetPosts")

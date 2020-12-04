@@ -664,6 +664,44 @@ func (s *SqlPostStore) GetPosts(options model.GetPostsOptions, _ bool) (*model.P
 	return list, nil
 }
 
+func (s *SqlPostStore) GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, error) {
+	var posts []*model.Post
+	query := " FROM Posts WHERE DeleteAt = 0 AND Posts.Type NOT LIKE 'system_%' "
+	termsMap := map[string]interface{}{
+		"Offset": options.PerPage * options.Page,
+		"Limit": options.PerPage,
+	}
+	if options.UserId != "" {
+		query += "AND UserId = :UserId "
+		termsMap["UserId"] = options.UserId
+	}
+	if options.Keyword != "" {
+		query += "AND Message LIKE '%" + options.Keyword + "%' "
+	}
+	countQuery := "SELECT COUNT(*)" + query
+	count, err := s.GetReplica().SelectInt(countQuery, termsMap)
+	if err != nil {
+		return nil, 0, errors.Wrap(err, "failed to find Posts")
+	}
+
+	fetchQuery := "SELECT *" + query + "ORDER BY CreateAt ASC LIMIT :Limit OFFSET :Offset"
+	_, err = s.GetReplica().Select(&posts, fetchQuery, termsMap)
+	if err != nil {
+		return nil, 0, errors.Wrap(err, "failed to find Posts")
+	}
+
+	list := model.NewPostList()
+
+	for _, p := range posts {
+		list.AddPost(p)
+		list.AddOrder(p.Id)
+	}
+
+	list.MakeNonNil()
+
+	return list, int(count), nil
+}
+
 func (s *SqlPostStore) GetPostsSince(options model.GetPostsSinceOptions, allowFromCache bool) (*model.PostList, error) {
 	var posts []*model.Post
 

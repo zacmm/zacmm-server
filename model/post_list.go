@@ -164,3 +164,13 @@ func PostListFromJson(data io.Reader) *PostList {
 	json.NewDecoder(data).Decode(&o)
 	return o
 }
+
+type AllPosts struct {
+	List *PostList
+	TotalPages int
+}
+
+func (a *AllPosts) ToJson() string {
+	b, _ := json.Marshal(a)
+	return string(b)
+}

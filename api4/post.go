@@ -24,6 +24,7 @@ func (api *API) InitPost() {
 	api.BaseRoutes.Post.Handle("/files/info", api.ApiSessionRequired(getFileInfosForPost)).Methods("GET")
 	api.BaseRoutes.PostsForChannel.Handle("", api.ApiSessionRequired(getPostsForChannel)).Methods("GET")
 	api.BaseRoutes.PostsForUser.Handle("/flagged", api.ApiSessionRequired(getFlaggedPostsForUser)).Methods("GET")
+	api.BaseRoutes.PostsAll.Handle("", api.ApiSessionRequired(getAllPosts)).Methods("POST")
 
 	api.BaseRoutes.ChannelForUser.Handle("/posts/unread", api.ApiSessionRequired(getPostsForChannelAroundLastUnread)).Methods("GET")
 
@@ -127,6 +128,37 @@ func createEphemeralPost(c *Context, w http.ResponseWriter, r *http.Request) {
 	rp = model.AddPostActionCookies(rp, c.App.PostActionCookieSecret())
 	rp = c.App.PreparePostForClient(rp, true, false)
 	w.Write([]byte(rp.ToJson()))
+}
+
+func getAllPosts(c *Context, w http.ResponseWriter, r *http.Request) {
+	if !c.IsSystemAdmin() {
+		c.SetPermissionError(model.PERMISSION_EDIT_OTHER_USERS)
+		return
+	}
+
+	options := model.GetAllPostsOptionsFromJson(r.Body)
+	if options == nil {
+		c.SetInvalidParam("options")
+		return
+	}
+
+	list, totalPosts, err := c.App.GetAllPosts(options)
+	if err != nil {
+		c.Err = err
+		return
+	}
+
+	totalPages := 0
+	if len(list.Posts) > 0 {
+		totalPages = totalPosts / options.PerPage + 1
+	}
+
+	allPosts := model.AllPosts{
+		List: list,
+		TotalPages: totalPages,
+	}
+
+	w.Write([]byte(allPosts.ToJson()))
 }
 
 func getPostsForChannel(c *Context, w http.ResponseWriter, r *http.Request) {

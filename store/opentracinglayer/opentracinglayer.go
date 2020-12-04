@@ -5112,6 +5112,10 @@ func (s *OpenTracingLayerPostStore) GetPosts(options model.GetPostsOptions, allo
 	return result, err
 }
 
+func (s *OpenTracingLayerPostStore) GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, error) {
+	return s.PostStore.GetAllPosts(options)
+}
+
 func (s *OpenTracingLayerPostStore) GetPostsAfter(options model.GetPostsOptions) (*model.PostList, error) {
 	origCtx := s.Root.Store.Context()
 	span, newCtx := tracing.StartSpanWithParentByContext(s.Root.Store.Context(), "PostStore.GetPostsAfter")

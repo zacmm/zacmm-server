@@ -231,6 +231,13 @@ type GetPostsOptions struct {
 	SkipFetchThreads bool
 }
 
+type GetAllPostsOptions struct {
+	UserId           string `json:"userId,omitempty"`
+	Keyword          string `json:"keyword,omitempty"`
+	Page             int    `json:"page,omitempty"`
+	PerPage          int    `json:"perPage,omitempty"`
+}
+
 func PostFromJson(data io.Reader) *Post {
 	var o *Post
 	json.NewDecoder(data).Decode(&o)
@@ -664,4 +671,10 @@ func RewriteImageURLs(message string, f func(string) string) string {
 	copy(result[offset:], message[ranges[len(ranges)-1].End:])
 
 	return string(result)
+}
+
+func GetAllPostsOptionsFromJson(data io.Reader) *GetAllPostsOptions {
+	var o GetAllPostsOptions
+	json.NewDecoder(data).Decode(&o)
+	return &o
 }

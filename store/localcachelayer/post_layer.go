@@ -131,3 +131,7 @@ func (s LocalCachePostStore) GetPosts(options model.GetPostsOptions, allowFromCa
 
 	return list, err
 }
+
+func (s LocalCachePostStore) GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, error) {
+	return s.PostStore.GetAllPosts(options)
+}

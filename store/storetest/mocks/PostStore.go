@@ -375,6 +375,10 @@ func (_m *PostStore) GetPostIdBeforeTime(channelId string, time int64) (string, 
 	return r0, r1
 }
 
+func (_m *PostStore) GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, error) {
+	return nil, 0, nil
+}
+
 // GetPosts provides a mock function with given fields: options, allowFromCache
 func (_m *PostStore) GetPosts(options model.GetPostsOptions, allowFromCache bool) (*model.PostList, error) {
 	ret := _m.Called(options, allowFromCache)
