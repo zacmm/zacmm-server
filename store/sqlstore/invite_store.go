@@ -64,7 +64,7 @@ func (s SqlInviteStore) GetTeamId(inviteId string) (string, error) {
 		return "", errors.Wrap(err, "incoming_invite_tosql")
 	}
 
-	if _, err := s.GetReplica().Select(&teamId, queryString, args...); err != nil {
+	if err := s.GetReplica().SelectOne(&teamId, queryString, args...); err != nil {
 		return "", errors.Wrap(err, "failed to find ips")
 	}
 

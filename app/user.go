@@ -161,15 +161,19 @@ func (a *App) CreateUserWithInviteId(user *model.User, inviteId, redirect string
 		return nil, err
 	}
 
-	team, nErr := a.Srv().Store.Team().GetByInviteId(inviteId)
+	teamId, tErr := a.Srv().Store.Invite().GetTeamId(inviteId)
+	if tErr != nil {
+		return nil, model.NewAppError("CreateUserWithInviteId", "app.team.get_by_invite_id.finding.app_error", nil, tErr.Error(), http.StatusNotFound)
+	}
+
+	team, nErr := a.GetTeam(teamId)
 	if nErr != nil {
-		var nfErr *store.ErrNotFound
-		switch {
-		case errors.As(nErr, &nfErr):
-			return nil, model.NewAppError("CreateUserWithInviteId", "app.team.get_by_invite_id.finding.app_error", nil, nfErr.Error(), http.StatusNotFound)
-		default:
-			return nil, model.NewAppError("CreateUserWithInviteId", "app.team.get_by_invite_id.finding.app_error", nil, nErr.Error(), http.StatusInternalServerError)
-		}
+		return nil, nErr
+	}
+
+	dErr := a.Srv().Store.Invite().Delete(inviteId)
+	if dErr != nil {
+		return nil, model.NewAppError("CreateUserWithInviteId", "app.team.get_by_invite_id.finding.app_error", nil, dErr.Error(), http.StatusInternalServerError)
 	}
 
 	if team.IsGroupConstrained() {

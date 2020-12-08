@@ -848,15 +848,14 @@ func (a *App) GetTeamByName(name string) (*model.Team, *model.AppError) {
 }
 
 func (a *App) GetTeamByInviteId(inviteId string) (*model.Team, *model.AppError) {
-	team, err := a.Srv().Store.Team().GetByInviteId(inviteId)
-	if err != nil {
-		var nfErr *store.ErrNotFound
-		switch {
-		case errors.As(err, &nfErr):
-			return nil, model.NewAppError("GetTeamByInviteId", "app.team.get_by_invite_id.finding.app_error", nil, nfErr.Error(), http.StatusNotFound)
-		default:
-			return nil, model.NewAppError("GetTeamByInviteId", "app.team.get_by_invite_id.finding.app_error", nil, err.Error(), http.StatusInternalServerError)
-		}
+	teamId, tErr := a.Srv().Store.Invite().GetTeamId(inviteId)
+	if tErr != nil {
+		return nil, model.NewAppError("CreateUserWithInviteId", "app.team.get_by_invite_id.finding.app_error", nil, tErr.Error(), http.StatusNotFound)
+	}
+
+	team, nErr := a.GetTeam(teamId)
+	if nErr != nil {
+		return nil, nErr
 	}
 
 	return team, nil
@@ -2040,4 +2039,13 @@ func (a *App) ClearTeamMembersCache(teamID string) {
 
 		page++
 	}
+}
+
+func (a *App) GetInviteId(teamId string) (string, *model.AppError) {
+	inviteId := model.NewId()
+	err := a.Srv().Store.Invite().Add(&model.InviteItem{inviteId, teamId})
+	if err != nil {
+		return "", model.NewAppError("GetInviteId", "app.team.get-invite_id.app_error", nil, err.Error(), http.StatusBadRequest)
+	}
+	return inviteId, nil
 }

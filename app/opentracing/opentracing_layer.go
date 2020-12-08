@@ -84,6 +84,10 @@ func (a *OpenTracingAppLayer) GetWhitelist(userId string) ([]string, *model.AppE
 	return a.app.GetWhitelist(userId)
 }
 
+func (a *OpenTracingAppLayer) GetInviteId(teamId string) (string, *model.AppError) {
+	return a.app.GetInviteId(teamId)
+}
+
 func (a *OpenTracingAppLayer) ActivateMfa(userId string, token string) *model.AppError {
 	origCtx := a.ctx
 	span, newCtx := tracing.StartSpanWithParentByContext(a.ctx, "app.ActivateMfa")

@@ -38,6 +38,7 @@ type AppIface interface {
 	AddToWhitelist(item *model.WhitelistItem) *model.AppError
 	DeleteFromWhitelist(item *model.WhitelistItem) *model.AppError
 	GetWhitelist(userId string) ([]string, *model.AppError)
+	GetInviteId(teamId string) (string, *model.AppError)
 	// @openTracingParams args
 	ExecuteCommand(args *model.CommandArgs) (*model.CommandResponse, *model.AppError)
 	// @openTracingParams teamId

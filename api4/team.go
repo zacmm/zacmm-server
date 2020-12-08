@@ -47,6 +47,7 @@ func (api *API) InitTeam() {
 	api.BaseRoutes.Team.Handle("/privacy", api.ApiSessionRequired(updateTeamPrivacy)).Methods("PUT")
 	api.BaseRoutes.Team.Handle("/stats", api.ApiSessionRequired(getTeamStats)).Methods("GET")
 	api.BaseRoutes.Team.Handle("/regenerate_invite_id", api.ApiSessionRequired(regenerateTeamInviteId)).Methods("POST")
+	api.BaseRoutes.Team.Handle("/invite", api.ApiSessionRequired(getInviteId)).Methods("GET")
 
 	api.BaseRoutes.Team.Handle("/image", api.ApiSessionRequiredTrustRequester(getTeamIcon)).Methods("GET")
 	api.BaseRoutes.Team.Handle("/image", api.ApiSessionRequired(setTeamIcon)).Methods("POST")
@@ -1602,4 +1603,26 @@ func teamMembersMinusGroupMembers(c *Context, w http.ResponseWriter, r *http.Req
 	}
 
 	w.Write(b)
+}
+
+func getInviteId(c *Context, w http.ResponseWriter, r *http.Request) {
+	c.RequireTeamId()
+	if c.Err != nil {
+		return
+	}
+
+	teamId := c.Params.TeamId
+	if c.Err != nil {
+		return
+	}
+
+	inviteId, err := c.App.GetInviteId(teamId)
+	if err != nil {
+		c.Err = err
+		return
+	}
+
+	inviteItem := model.InviteItem{InviteId: inviteId}
+
+	w.Write([]byte(inviteItem.ToJson()))
 }

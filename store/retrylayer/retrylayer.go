@@ -55,7 +55,7 @@ type RetryLayer struct {
 	UserTermsOfServiceStore   store.UserTermsOfServiceStore
 	WebhookStore              store.WebhookStore
 	WhitelistStore            store.WhitelistStore
-	InviteStore              store.InviteStore
+	InviteStore               store.InviteStore
 }
 
 func (s *RetryLayer) Audit() store.AuditStore {

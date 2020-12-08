@@ -330,6 +330,15 @@ func TeamPatchFromJson(data io.Reader) *TeamPatch {
 }
 
 type InviteItem struct {
-	InviteId string
-	TeamId   string
+	InviteId string `json:"invite_id"`
+	TeamId   string `json:"team_id,omitempty"`
+}
+
+func (t *InviteItem) ToJson() []byte {
+	b, err := json.Marshal(t)
+	if err != nil {
+		return []byte{}
+	}
+
+	return b
 }

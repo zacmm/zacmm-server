@@ -22,5 +22,5 @@ func (s LocalCacheInviteStore) Add(item *model.InviteItem) error {
 }
 
 func (s LocalCacheInviteStore) Delete(inviteId string) error {
-	return s.InviteStore.Delete(item)
+	return s.InviteStore.Delete(inviteId)
 }
