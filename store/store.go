@@ -53,6 +53,7 @@ type Store interface {
 	ProductNotices() ProductNoticesStore
 	Group() GroupStore
 	Whitelist() WhitelistStore
+	Invite() InviteStore
 	UserTermsOfService() UserTermsOfServiceStore
 	LinkMetadata() LinkMetadataStore
 	MarkSystemRanUnitTests()
@@ -692,6 +693,12 @@ type WhitelistStore interface {
 	Add(whitelistItem *model.WhitelistItem) error
 	Delete(whitelistItem *model.WhitelistItem) error
 	GetByUserId(userId string) ([]string, error)
+}
+
+type InviteStore interface {
+	Add(inviteItem *model.InviteItem) error
+	Delete(inviteId string) error
+	GetTeamId(inviteId string) (string, error)
 }
 
 type GroupStore interface {

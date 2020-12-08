@@ -712,3 +712,8 @@ func (_m *Store) Whitelist() store.WhitelistStore {
 	var r0 store.WhitelistStore
 	return r0
 }
+
+func (_m *Store) Invite() store.InviteStore {
+	var r0 store.InviteStore
+	return r0
+}

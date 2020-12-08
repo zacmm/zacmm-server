@@ -328,3 +328,8 @@ func TeamPatchFromJson(data io.Reader) *TeamPatch {
 
 	return &team
 }
+
+type InviteItem struct {
+	InviteId string
+	TeamId   string
+}

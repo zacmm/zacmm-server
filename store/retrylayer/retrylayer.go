@@ -55,6 +55,7 @@ type RetryLayer struct {
 	UserTermsOfServiceStore   store.UserTermsOfServiceStore
 	WebhookStore              store.WebhookStore
 	WhitelistStore            store.WhitelistStore
+	InviteStore              store.InviteStore
 }
 
 func (s *RetryLayer) Audit() store.AuditStore {
@@ -195,6 +196,10 @@ func (s *RetryLayer) Webhook() store.WebhookStore {
 
 func (s *RetryLayer) Whitelist() store.WhitelistStore {
 	return s.WhitelistStore
+}
+
+func (s *RetryLayer) Invite() store.InviteStore {
+	return s.InviteStore
 }
 
 type RetryLayerAuditStore struct {
@@ -369,6 +374,11 @@ type RetryLayerWebhookStore struct {
 
 type RetryLayerWhitelistStore struct {
 	store.WhitelistStore
+	Root *RetryLayer
+}
+
+type RetryLayerInviteStore struct {
+	store.InviteStore
 	Root *RetryLayer
 }
 
@@ -10928,5 +10938,6 @@ func New(childStore store.Store) *RetryLayer {
 	newStore.UserTermsOfServiceStore = &RetryLayerUserTermsOfServiceStore{UserTermsOfServiceStore: childStore.UserTermsOfService(), Root: &newStore}
 	newStore.WebhookStore = &RetryLayerWebhookStore{WebhookStore: childStore.Webhook(), Root: &newStore}
 	newStore.WhitelistStore = &RetryLayerWhitelistStore{WhitelistStore: childStore.Whitelist(), Root: &newStore}
+	newStore.InviteStore = &RetryLayerInviteStore{InviteStore: childStore.Invite(), Root: &newStore}
 	return &newStore
 }

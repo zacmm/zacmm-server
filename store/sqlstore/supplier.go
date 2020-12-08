@@ -107,6 +107,7 @@ type SqlSupplierStores struct {
 	UserTermsOfService   store.UserTermsOfServiceStore
 	linkMetadata         store.LinkMetadataStore
 	whitelist            store.WhitelistStore
+	invite               store.InviteStore
 }
 
 type SqlSupplier struct {
@@ -178,6 +179,7 @@ func NewSqlSupplier(settings model.SqlSettings, metrics einterfaces.MetricsInter
 	supplier.stores.scheme = newSqlSchemeStore(supplier)
 	supplier.stores.group = newSqlGroupStore(supplier)
 	supplier.stores.whitelist = newSqlWhitelistStore(supplier)
+	supplier.stores.invite = newSqlInviteStore(supplier)
 	supplier.stores.productNotices = newSqlProductNoticesStore(supplier)
 	err := supplier.GetMaster().CreateTablesIfNotExists()
 	if err != nil {
@@ -1120,6 +1122,10 @@ func (ss *SqlSupplier) Webhook() store.WebhookStore {
 
 func (ss *SqlSupplier) Whitelist() store.WhitelistStore {
 	return ss.stores.whitelist
+}
+
+func (ss *SqlSupplier) Invite() store.InviteStore {
+	return ss.stores.invite
 }
 
 func (ss *SqlSupplier) Command() store.CommandStore {
