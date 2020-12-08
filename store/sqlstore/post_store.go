@@ -666,8 +666,10 @@ func (s *SqlPostStore) GetPosts(options model.GetPostsOptions, _ bool) (*model.P
 
 func (s *SqlPostStore) GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, error) {
 	var posts []*model.Post
-	query := " FROM Posts WHERE DeleteAt = 0 AND Posts.Type NOT LIKE 'system_%' "
+	query := " FROM Posts WHERE DeleteAt = 0 AND Posts.Type NOT LIKE 'system_%' AND CreateAt >= :StartDate AND CreateAt <= :EndDate "
 	termsMap := map[string]interface{}{
+		"StartDate": options.StartDate,
+		"EndDate": options.EndDate,
 		"Offset": options.PerPage * options.Page,
 		"Limit": options.PerPage,
 	}

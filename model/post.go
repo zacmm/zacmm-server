@@ -234,6 +234,8 @@ type GetPostsOptions struct {
 type GetAllPostsOptions struct {
 	UserId           string `json:"userId,omitempty"`
 	Keyword          string `json:"keyword,omitempty"`
+	StartDate        int64  `json:"startDate"`
+	EndDate          int64  `json:"endDate"`
 	Page             int    `json:"page,omitempty"`
 	PerPage          int    `json:"perPage,omitempty"`
 }
