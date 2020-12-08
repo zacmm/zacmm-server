@@ -177,21 +177,6 @@ func createUser(c *Context, w http.ResponseWriter, r *http.Request) {
 	}
 
 	user.SanitizeInput(c.IsSystemAdmin())
-	users, gErr := c.App.GetUsers(&model.UserGetOptions{PerPage: 1})
-	if gErr != nil {
-		c.Err = gErr
-		return
-	}
-	if len(users) > 0 {
-		whitelisted, wlErr := web.CheckWhitelisted(c, r)
-		if wlErr != nil {
-			c.Err = wlErr
-			return
-		}
-		if !whitelisted {
-			return
-		}
-	}
 
 	tokenId := r.URL.Query().Get("t")
 	inviteId := r.URL.Query().Get("iid")
