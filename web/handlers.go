@@ -85,8 +85,16 @@ func CheckWhitelisted(c *Context, r *http.Request) (bool, *model.AppError) {
 	if c.IsSystemAdmin() {
 		return true, nil
 	}
+	userId := c.App.Session().UserId
+	teamAdmin, taErr := c.App.CheckIfTeamAdmin(userId)
+	if taErr != nil {
+		return false, taErr
+	}
+	if teamAdmin {
+		return true, nil
+	}
 	userIps := append(r.Header["X-Forwarded-For"], r.Header["X-Real-IP"]...)
-	wlIps, err := c.App.Srv().Store.Whitelist().GetByUserId(c.App.Session().UserId)
+	wlIps, err := c.App.Srv().Store.Whitelist().GetByUserId(userId)
 	if err != nil {
 		return false, model.NewAppError("GetWhitelist", "app.users.get_whitelist", nil, err.Error(), http.StatusInternalServerError)
 	}

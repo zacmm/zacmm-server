@@ -15915,3 +15915,6 @@ func (a *OpenTracingAppLayer) SetServer(srv *app.Server) {
 func (a *OpenTracingAppLayer) GetT() i18n.TranslateFunc {
 	return a.t
 }
+func (a *OpenTracingAppLayer) CheckIfTeamAdmin(userId string) (bool, *model.AppError) {
+	return a.app.CheckIfTeamAdmin(userId)
+}

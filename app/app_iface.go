@@ -82,6 +82,7 @@ type AppIface interface {
 	// CreateUser creates a user and sets several fields of the returned User struct to
 	// their zero values.
 	CreateUser(user *model.User) (*model.User, *model.AppError)
+	CheckIfTeamAdmin(userId string) (bool, *model.AppError)
 	// Creates and stores FileInfos for a post created before the FileInfos table existed.
 	MigrateFilenamesToFileInfos(post *model.Post) []*model.FileInfo
 	// DefaultChannelNames returns the list of system-wide default channel names.

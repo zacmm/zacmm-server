@@ -1361,3 +1361,7 @@ func (_m *UserStore) VerifyEmail(userId string, email string) (string, error) {
 
 	return r0, r1
 }
+
+func (_m *UserStore) IsTeamAdmin(userId string) (bool, error) {
+	return false, nil
+}

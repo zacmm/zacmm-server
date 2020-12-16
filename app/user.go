@@ -2461,3 +2461,11 @@ func (a *App) UpdateThreadReadForUser(userId, threadId string, timestamp int64) 
 	a.Publish(message)
 	return nil
 }
+
+func (a *App) CheckIfTeamAdmin(userId string) (bool, *model.AppError) {
+	isTeamAdmin, err := a.Srv().Store.User().IsTeamAdmin(userId)
+	if err != nil {
+		return false, model.NewAppError("CheckIfTeamAdmin", "app.user.check_if_team_admin.app_error", nil, err.Error(), http.StatusInternalServerError)
+	}
+	return isTeamAdmin, nil
+}

@@ -1945,3 +1945,11 @@ func (us SqlUserStore) GetKnownUsers(userId string) ([]string, error) {
 
 	return userIds, nil
 }
+
+func (us SqlUserStore) IsTeamAdmin(userId string) (bool, error) {
+	count, err := us.GetReplica().SelectInt("SELECT COUNT(*) FROM TeamMembers WHERE UserId=:UserId AND SchemeAdmin=1", map[string]interface{}{"UserId": userId})
+	if err != nil {
+		return false, errors.Wrap(err, "failed to count Users")
+	}
+	return count != 0, nil
+}
