@@ -4,6 +4,7 @@
 package app
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -718,20 +719,54 @@ func (a *App) GetPosts(channelId string, offset int, limit int) (*model.PostList
 	return postList, nil
 }
 
-func (a *App) GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, *model.AppError) {
+func (a *App) GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, *map[string]model.PostInfo, *model.AppError) {
 	options.PerPage = 20
 	postList, totalPosts, err := a.Srv().Store.Post().GetAllPosts(options)
 	if err != nil {
 		var invErr *store.ErrInvalidInput
 		switch {
 		case errors.As(err, &invErr):
-			return nil, 0, model.NewAppError("GetAllPosts", "app.post.get_posts.app_error", nil, invErr.Error(), http.StatusBadRequest)
+			return nil, 0, nil, model.NewAppError("GetAllPosts", "app.post.get_posts.app_error", nil, invErr.Error(), http.StatusBadRequest)
 		default:
-			return nil, 0, model.NewAppError("GetAllPosts", "app.post.get_root_posts.app_error", nil, err.Error(), http.StatusInternalServerError)
+			return nil, 0, nil, model.NewAppError("GetAllPosts", "app.post.get_root_posts.app_error", nil, err.Error(), http.StatusInternalServerError)
 		}
 	}
 
-	return postList, totalPosts, nil
+	postInfoMap := map[string]model.PostInfo{}
+
+	for _, post := range postList.Posts {
+		postInfo := model.PostInfo{}
+		channelId := post.ChannelId
+		channel, err := a.GetChannel(channelId)
+		if err != nil {
+			return nil, 0, nil, err
+		}
+		postInfo.ChannelName = channel.DisplayName
+		if channel.Type == "D" {
+			memberIds := strings.Split(channel.Name, "__")
+			membersBuf := bytes.NewBuffer([]byte{})
+			for i, memberId := range memberIds {
+				member, err := a.GetUser(memberId)
+				if err != nil {
+					return nil, 0, nil, err
+				}
+				if i != 0 {
+					membersBuf.WriteString(", ")
+				}
+				membersBuf.WriteString(member.Username)
+			}
+			postInfo.Members = membersBuf.String()
+		} else {
+			team, err := a.GetTeam(channel.TeamId)
+			if err != nil {
+				return nil, 0, nil, err
+			}
+			postInfo.TeamName = team.DisplayName
+		}
+		postInfoMap[post.Id] = postInfo
+	}
+
+	return postList, totalPosts, &postInfoMap, nil
 }
 
 func (a *App) GetPostsEtag(channelId string) string {

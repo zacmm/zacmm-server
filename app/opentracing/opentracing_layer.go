@@ -7006,7 +7006,7 @@ func (a *OpenTracingAppLayer) GetPostThread(postId string, skipFetchThreads bool
 	return resultVar0, resultVar1
 }
 
-func (a *OpenTracingAppLayer) GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, *model.AppError) {
+func (a *OpenTracingAppLayer) GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, *map[string]model.PostInfo, *model.AppError) {
 	return a.app.GetAllPosts(options)
 }
 

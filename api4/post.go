@@ -142,7 +142,7 @@ func getAllPosts(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	list, totalPosts, err := c.App.GetAllPosts(options)
+	list, totalPosts, postInfoMap, err := c.App.GetAllPosts(options)
 	if err != nil {
 		c.Err = err
 		return
@@ -155,6 +155,7 @@ func getAllPosts(c *Context, w http.ResponseWriter, r *http.Request) {
 
 	allPosts := model.AllPosts{
 		List: list,
+		PostInfoMap: postInfoMap,
 		TotalPages: totalPages,
 	}
 

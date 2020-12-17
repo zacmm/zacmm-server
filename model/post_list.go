@@ -168,6 +168,7 @@ func PostListFromJson(data io.Reader) *PostList {
 type AllPosts struct {
 	List *PostList
 	TotalPages int
+	PostInfoMap *map[string]PostInfo
 }
 
 func (a *AllPosts) ToJson() string {
