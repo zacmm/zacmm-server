@@ -379,6 +379,10 @@ func (_m *PostStore) GetAllPosts(options *model.GetAllPostsOptions) (*model.Post
 	return nil, 0, nil
 }
 
+func (_m *PostStore) RemovePostsBetween(options *model.RemovePostsBetweenOptions) (int, error) {
+	return 0, nil
+}
+
 // GetPosts provides a mock function with given fields: options, allowFromCache
 func (_m *PostStore) GetPosts(options model.GetPostsOptions, allowFromCache bool) (*model.PostList, error) {
 	ret := _m.Called(options, allowFromCache)

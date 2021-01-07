@@ -1534,3 +1534,12 @@ func isPostMention(user *model.User, post *model.Post, keywords map[string][]str
 func (a *App) GetThreadMembershipsForUser(userId string) ([]*model.ThreadMembership, error) {
 	return a.Srv().Store.Thread().GetMembershipsForUser(userId)
 }
+
+func (a *App) RemovePostsBetween(options *model.RemovePostsBetweenOptions) (int, *model.AppError) {
+	removedPosts, err := a.Srv().Store.Post().RemovePostsBetween(options)
+	if err != nil {
+		return 0, model.NewAppError("RemovePostsBetween", "app.post.remove_posts_between.app_error", nil, err.Error(), http.StatusInternalServerError)
+	}
+
+	return removedPosts, nil
+}

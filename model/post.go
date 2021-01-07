@@ -240,6 +240,11 @@ type GetAllPostsOptions struct {
 	PerPage          int    `json:"perPage,omitempty"`
 }
 
+type RemovePostsBetweenOptions struct {
+	StartTime        int64  `json:"startTime"`
+	EndTime          int64  `json:"endTime"`
+}
+
 func PostFromJson(data io.Reader) *Post {
 	var o *Post
 	json.NewDecoder(data).Decode(&o)
@@ -679,4 +684,19 @@ func GetAllPostsOptionsFromJson(data io.Reader) *GetAllPostsOptions {
 	var o GetAllPostsOptions
 	json.NewDecoder(data).Decode(&o)
 	return &o
+}
+
+func RemovePostsBetweenOptionsFromJson(data io.Reader) *RemovePostsBetweenOptions {
+	var o RemovePostsBetweenOptions
+	json.NewDecoder(data).Decode(&o)
+	return &o
+}
+
+type RemovedPosts struct {
+	Removed int
+}
+
+func (r *RemovedPosts) ToJson() string {
+	b, _ := json.Marshal(r)
+	return string(b)
 }

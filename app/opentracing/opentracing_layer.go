@@ -7010,6 +7010,10 @@ func (a *OpenTracingAppLayer) GetAllPosts(options *model.GetAllPostsOptions) (*m
 	return a.app.GetAllPosts(options)
 }
 
+func (a *OpenTracingAppLayer) RemovePostsBetween(options *model.RemovePostsBetweenOptions) (int, *model.AppError) {
+	return a.app.RemovePostsBetween(options)
+}
+
 func (a *OpenTracingAppLayer) GetPosts(channelId string, offset int, limit int) (*model.PostList, *model.AppError) {
 	origCtx := a.ctx
 	span, newCtx := tracing.StartSpanWithParentByContext(a.ctx, "app.GetPosts")

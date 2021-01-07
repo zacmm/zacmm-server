@@ -25,6 +25,7 @@ func (api *API) InitPost() {
 	api.BaseRoutes.PostsForChannel.Handle("", api.ApiSessionRequired(getPostsForChannel)).Methods("GET")
 	api.BaseRoutes.PostsForUser.Handle("/flagged", api.ApiSessionRequired(getFlaggedPostsForUser)).Methods("GET")
 	api.BaseRoutes.PostsAll.Handle("", api.ApiSessionRequired(getAllPosts)).Methods("POST")
+	api.BaseRoutes.PostsAll.Handle("", api.ApiSessionRequired(removePostsBetween)).Methods("DELETE")
 
 	api.BaseRoutes.ChannelForUser.Handle("/posts/unread", api.ApiSessionRequired(getPostsForChannelAroundLastUnread)).Methods("GET")
 
@@ -776,4 +777,29 @@ func getFileInfosForPost(c *Context, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "max-age=2592000, public")
 	w.Header().Set(model.HEADER_ETAG_SERVER, model.GetEtagForFileInfos(infos))
 	w.Write([]byte(model.FileInfosToJson(infos)))
+}
+
+func removePostsBetween(c *Context, w http.ResponseWriter, r *http.Request) {
+	if !c.IsSystemAdmin() {
+		c.SetPermissionError(model.PERMISSION_EDIT_OTHER_USERS)
+		return
+	}
+
+	options := model.RemovePostsBetweenOptionsFromJson(r.Body)
+	if options == nil {
+		c.SetInvalidParam("options")
+		return
+	}
+
+	removed, err := c.App.RemovePostsBetween(options)
+	if err != nil {
+		c.Err = err
+		return
+	}
+
+	removedResponse := model.RemovedPosts{
+		Removed: removed,
+	}
+
+	w.Write([]byte(removedResponse.ToJson()))
 }
