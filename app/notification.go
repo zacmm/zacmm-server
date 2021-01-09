@@ -191,28 +191,6 @@ func (a *App) SendNotifications(post *model.Post, team *model.Team, channel *mod
 		mentionedUsersList = append(mentionedUsersList, id)
 	}
 
-	channelMembers, chErr := a.Srv().Store.Channel().GetMembers(post.ChannelId, 0, 1000000)
-	if chErr != nil {
-		return nil, chErr
-	}
-	displayMentionsFor := []string{}
-	for _, member := range []model.ChannelMember(*channelMembers) {
-		displayMentionsFor = append(displayMentionsFor, member.UserId)
-	}
-	for _, userId := range displayMentionsFor {
-		umc := make(chan *model.AppError, 1)
-		go func(userId string) {
-			defer close(umc)
-			nErr := a.Srv().Store.Channel().IncrementMentionCount(post.ChannelId, userId, *a.Config().ServiceSettings.ThreadAutoFollow)
-			if nErr != nil {
-				umc <- model.NewAppError("SendNotifications", "app.channel.increment_mention_count.app_error", nil, nErr.Error(), http.StatusInternalServerError)
-				return
-			}
-			umc <- nil
-		}(userId)
-		updateMentionChans = append(updateMentionChans, umc)
-	}
-
 	notification := &PostNotification{
 		Post:       post,
 		Channel:    channel,
@@ -415,6 +393,32 @@ func (a *App) SendNotifications(post *model.Post, team *model.Team, channel *mod
 				break
 			}
 		}
+	}
+
+	displayMentionsFor := []string{}
+	if mentions.HereMentioned {
+		displayMentionsFor = mentionedUsersList
+	} else {
+		channelMembers, chErr := a.Srv().Store.Channel().GetMembers(post.ChannelId, 0, 1000000)
+		if chErr != nil {
+			return nil, chErr
+		}
+		for _, member := range []model.ChannelMember(*channelMembers) {
+			displayMentionsFor = append(displayMentionsFor, member.UserId)
+		}
+	}
+	for _, userId := range displayMentionsFor {
+		umc := make(chan *model.AppError, 1)
+		go func(userId string) {
+			defer close(umc)
+			nErr := a.Srv().Store.Channel().IncrementMentionCount(post.ChannelId, userId, *a.Config().ServiceSettings.ThreadAutoFollow)
+			if nErr != nil {
+				umc <- model.NewAppError("SendNotifications", "app.channel.increment_mention_count.app_error", nil, nErr.Error(), http.StatusInternalServerError)
+				return
+			}
+			umc <- nil
+		}(userId)
+		updateMentionChans = append(updateMentionChans, umc)
 	}
 
 	if len(displayMentionsFor) != 0 {
