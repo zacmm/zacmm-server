@@ -189,7 +189,17 @@ func (a *App) SendNotifications(post *model.Post, team *model.Team, channel *mod
 	}
 	for id := range mentions.Mentions {
 		mentionedUsersList = append(mentionedUsersList, id)
+	}
 
+	channelMembers, chErr := a.Srv().Store.Channel().GetMembers(post.ChannelId, 0, 1000000)
+	if chErr != nil {
+		return nil, chErr
+	}
+	displayMentionsFor := []string{}
+	for _, member := range []model.ChannelMember(*channelMembers) {
+		displayMentionsFor = append(displayMentionsFor, member.UserId)
+	}
+	for _, userId := range displayMentionsFor {
 		umc := make(chan *model.AppError, 1)
 		go func(userId string) {
 			defer close(umc)
@@ -199,7 +209,7 @@ func (a *App) SendNotifications(post *model.Post, team *model.Team, channel *mod
 				return
 			}
 			umc <- nil
-		}(id)
+		}(userId)
 		updateMentionChans = append(updateMentionChans, umc)
 	}
 
@@ -407,8 +417,8 @@ func (a *App) SendNotifications(post *model.Post, team *model.Team, channel *mod
 		}
 	}
 
-	if len(mentionedUsersList) != 0 {
-		message.Add("mentions", model.ArrayToJson(mentionedUsersList))
+	if len(displayMentionsFor) != 0 {
+		message.Add("mentions", model.ArrayToJson(displayMentionsFor))
 	}
 
 	a.Publish(message)
