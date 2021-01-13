@@ -691,12 +691,3 @@ func RemovePostsBetweenOptionsFromJson(data io.Reader) *RemovePostsBetweenOption
 	json.NewDecoder(data).Decode(&o)
 	return &o
 }
-
-type RemovedPosts struct {
-	Removed int
-}
-
-func (r *RemovedPosts) ToJson() string {
-	b, _ := json.Marshal(r)
-	return string(b)
-}

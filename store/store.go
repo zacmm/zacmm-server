@@ -280,7 +280,7 @@ type PostStore interface {
 	PermanentDeleteByChannel(channelId string) error
 	GetPosts(options model.GetPostsOptions, allowFromCache bool) (*model.PostList, error)
 	GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, error)
-	RemovePostsBetween(options *model.RemovePostsBetweenOptions) (int, error)
+	RemovePostsBetween(options *model.RemovePostsBetweenOptions) ([]*model.Post, error)
 	GetFlaggedPosts(userId string, offset int, limit int) (*model.PostList, error)
 	// @openTracingParams userId, teamId, offset, limit
 	GetFlaggedPostsForTeam(userId, teamId string, offset int, limit int) (*model.PostList, error)

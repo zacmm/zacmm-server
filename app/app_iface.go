@@ -633,7 +633,7 @@ type AppIface interface {
 	GetPostThread(postId string, skipFetchThreads bool) (*model.PostList, *model.AppError)
 	GetPosts(channelId string, offset int, limit int) (*model.PostList, *model.AppError)
 	GetAllPosts(options *model.GetAllPostsOptions) (*model.PostList, int, *map[string]model.PostInfo, *model.AppError)
-	RemovePostsBetween(options *model.RemovePostsBetweenOptions) (int, *model.AppError)
+	RemovePostsBetween(options *model.RemovePostsBetweenOptions) ([]*model.Post, *model.AppError)
 	GetPostsAfterPost(options model.GetPostsOptions) (*model.PostList, *model.AppError)
 	GetPostsAroundPost(before bool, options model.GetPostsOptions) (*model.PostList, *model.AppError)
 	GetPostsBeforePost(options model.GetPostsOptions) (*model.PostList, *model.AppError)

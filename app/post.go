@@ -1535,10 +1535,10 @@ func (a *App) GetThreadMembershipsForUser(userId string) ([]*model.ThreadMembers
 	return a.Srv().Store.Thread().GetMembershipsForUser(userId)
 }
 
-func (a *App) RemovePostsBetween(options *model.RemovePostsBetweenOptions) (int, *model.AppError) {
+func (a *App) RemovePostsBetween(options *model.RemovePostsBetweenOptions) ([]*model.Post, *model.AppError) {
 	removedPosts, err := a.Srv().Store.Post().RemovePostsBetween(options)
 	if err != nil {
-		return 0, model.NewAppError("RemovePostsBetween", "app.post.remove_posts_between.app_error", nil, err.Error(), http.StatusInternalServerError)
+		return []*model.Post{}, model.NewAppError("RemovePostsBetween", "app.post.remove_posts_between.app_error", nil, err.Error(), http.StatusInternalServerError)
 	}
 
 	return removedPosts, nil

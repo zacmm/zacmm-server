@@ -2051,16 +2051,16 @@ func (s *SqlPostStore) updateThreadsFromPosts(transaction *gorp.Transaction, pos
 	return nil
 }
 
-func (s *SqlPostStore) RemovePostsBetween(options *model.RemovePostsBetweenOptions) (int, error) {
+func (s *SqlPostStore) RemovePostsBetween(options *model.RemovePostsBetweenOptions) ([]*model.Post, error) {
 
-	sqlResult, err := s.GetMaster().Exec("DELETE from Posts WHERE CreateAt >= :StartTime AND CreateAt <= :EndTime", map[string]interface{}{"StartTime": options.StartTime, "EndTime": options.EndTime})
+	termsMap := map[string]interface{}{"StartTime": options.StartTime, "EndTime": options.EndTime}
+	query := " from Posts WHERE CreateAt >= :StartTime AND CreateAt <= :EndTime AND DeleteAt = 0"
+
+	posts := []*model.Post{}
+	_, err := s.GetReplica().Select(&posts, "SELECT *" + query, termsMap)
 	if err != nil {
-		return 0, errors.Wrap(err, "failed to delete Posts")
+		return []*model.Post{}, errors.Wrap(err, "failed to find Posts")
 	}
 
-	rowsAffected, err := sqlResult.RowsAffected()
-	if err != nil {
-		return 0, errors.Wrap(err, "failed to delete Posts")
-	}
-	return int(rowsAffected), nil
+	return posts, nil
 }
