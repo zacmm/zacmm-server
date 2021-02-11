@@ -1072,16 +1072,6 @@ func (a *App) DeletePost(postId, deleteByID string) (*model.Post, *model.AppErro
 		return nil, model.NewAppError("DeletePost", "app.post.get.app_error", nil, nErr.Error(), http.StatusBadRequest)
 	}
 
-	channel, err := a.GetChannel(post.ChannelId)
-	if err != nil {
-		return nil, err
-	}
-
-	if channel.DeleteAt != 0 {
-		err := model.NewAppError("DeletePost", "api.post.delete_post.can_not_delete_post_in_deleted.error", nil, "", http.StatusBadRequest)
-		return nil, err
-	}
-
 	if err := a.Srv().Store.Post().Delete(postId, model.GetMillis(), deleteByID); err != nil {
 		var nfErr *store.ErrNotFound
 		switch {
@@ -1535,11 +1525,18 @@ func (a *App) GetThreadMembershipsForUser(userId string) ([]*model.ThreadMembers
 	return a.Srv().Store.Thread().GetMembershipsForUser(userId)
 }
 
-func (a *App) RemovePostsBetween(options *model.RemovePostsBetweenOptions) ([]*model.Post, *model.AppError) {
+func (a *App) RemovePostsBetween(options *model.RemovePostsBetweenOptions) (int, *model.AppError) {
 	removedPosts, err := a.Srv().Store.Post().RemovePostsBetween(options)
 	if err != nil {
-		return []*model.Post{}, model.NewAppError("RemovePostsBetween", "app.post.remove_posts_between.app_error", nil, err.Error(), http.StatusInternalServerError)
+		return 0, model.NewAppError("RemovePostsBetween", "app.post.remove_posts_between.app_error", nil, err.Error(), http.StatusInternalServerError)
+	}
+	userId := a.Session().UserId
+	for _, post := range removedPosts {
+		_, err := a.DeletePost(post.Id, userId)
+		if err != nil {
+			return 0, err
+		}
 	}
 
-	return removedPosts, nil
+	return len(removedPosts), nil
 }

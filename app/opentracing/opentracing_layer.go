@@ -7010,7 +7010,7 @@ func (a *OpenTracingAppLayer) GetAllPosts(options *model.GetAllPostsOptions) (*m
 	return a.app.GetAllPosts(options)
 }
 
-func (a *OpenTracingAppLayer) RemovePostsBetween(options *model.RemovePostsBetweenOptions) ([]*model.Post, *model.AppError) {
+func (a *OpenTracingAppLayer) RemovePostsBetween(options *model.RemovePostsBetweenOptions) (int, *model.AppError) {
 	return a.app.RemovePostsBetween(options)
 }
 

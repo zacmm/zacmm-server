@@ -797,9 +797,5 @@ func removePostsBetween(c *Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	encErr := json.NewEncoder(w).Encode(&removed)
-	if encErr != nil {
-		c.Err = model.NewAppError("removePostsBetween", "api.post.remove_between.app_error", nil, encErr.Error(), http.StatusInternalServerError)
-		return
-	}
+	w.Write([]byte(strconv.Itoa(removed)))
 }
