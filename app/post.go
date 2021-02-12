@@ -1531,12 +1531,13 @@ func (a *App) RemovePostsBetween(options *model.RemovePostsBetweenOptions) (int,
 		return 0, model.NewAppError("RemovePostsBetween", "app.post.remove_posts_between.app_error", nil, err.Error(), http.StatusInternalServerError)
 	}
 	userId := a.Session().UserId
-	for _, post := range removedPosts {
-		_, err := a.DeletePost(post.Id, userId)
-		if err != nil {
-			return 0, err
+	go func(){
+		for _, post := range removedPosts {
+			_, err := a.DeletePost(post.Id, userId)
+			if err == nil {
+			}
 		}
-	}
+	}()
 
 	return len(removedPosts), nil
 }
