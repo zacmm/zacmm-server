@@ -9,7 +9,7 @@ npm-debug.log
 webapp/yarn-error.log
 mattermost.mattermost-license
 config/mattermost.mattermost-license
-config/config.json
+#config/config.json
 cmd/mattermost/data
 
 web/static/js/bundle*.js
